@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     commands:
-      - apt-get update && apt-get install -y jq
+      - apt-get update && apt-get install -y 
 
   pre_build:
     commands:
@@ -50,3 +50,4 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
+
