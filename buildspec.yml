@@ -37,15 +37,9 @@ phases:
       - cat imagedefinitions.json
 
       - echo Updating kubeconfig...
-      - aws eks update-kubeconfig \
-          --region ap-south-1 \
-          --name cicdk8masternode \
-          --alias cicdk8 \
-          --role-arn arn:aws:iam::757649255209:role/codebuild-eks-access-role \
-          --kubeconfig /root/.kube/config
-
+      - echo Updating kubeconfig...
+      - aws eks update-kubeconfig --region ap-south-1 --name cicdk8masternode --alias cicdk8 --role-arn arn:aws:iam::757649255209:role/codebuild-eks-access-role --kubeconfig /root/.kube/config
       - cat /root/.kube/config
-
       - echo Updating image in Kubernetes deployment...
       - kubectl set image deployment/myapp webapp=$REPO:$IMAGE_TAG
 
@@ -55,3 +49,4 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
+
