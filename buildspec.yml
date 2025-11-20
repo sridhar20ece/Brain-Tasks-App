@@ -22,16 +22,17 @@ phases:
       - printf '[{"name":"webapp","imageUri":"%s"}]' "$REPO:$IMAGE_TAG" > imagedefinitions.json
       - cat imagedefinitions.json
   post_build:
-  commands:
-    - echo Updating kubeconfig...
-    - aws eks update-kubeconfig --region ap-south-1 --name cicdk8masternode
+    commands:
+     - echo Updating kubeconfig...
+     - aws eks update-kubeconfig --region ap-south-1 --name cicdk8masternode
 
-    - echo Updating image in Kubernetes deployment...
-    - kubectl set image deployment/myapp webapp=$REPO:$IMAGE_TAG
+     - echo Updating image in Kubernetes deployment...
+     - kubectl set image deployment/myapp webapp=$REPO:$IMAGE_TAG
 
-    - echo Apply full manifest if needed...
-    - kubectl apply -f k8s/deployment.yaml
+     - echo Apply full manifest if needed...
+     - kubectl apply -f k8s/deployment.yaml
 
 artifacts:
   files:
     - imagedefinitions.json
+
