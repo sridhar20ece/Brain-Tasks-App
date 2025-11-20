@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp02
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp02
+  template:
+    metadata:
+      labels:
+        app: webapp02
+    spec:
+      containers:
+      - name: webapp02
+        image: public.ecr.aws/o2p4d1o6/awspub/mypubrepo:latest
+        ports:
+        - containerPort: 80   # change if your app listens on another port

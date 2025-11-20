@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - REPO="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/brain-tasks-app"
+  build:
+    commands:
+      - echo Building Docker image...
+      - docker build -t brain-tasks-app .
+      - docker tag brain-tasks-app:latest $REPO:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo Pushing Docker Image to ECR...
+      - docker push $REPO:$IMAGE_TAG
+
+artifacts:
+  files:
+    - imagedefinitions.json
+
+post_build:
+  commands:
+    - echo Creating imagedefinitions.json...
+    - printf '[{"name":"webapp","imageUri":"%s"}]' "$REPO:$IMAGE_TAG" > imagedefinitions.json
