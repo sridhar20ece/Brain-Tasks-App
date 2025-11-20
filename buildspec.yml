@@ -24,7 +24,7 @@ phases:
   post_build:
     commands:
      - echo Updating kubeconfig...
-     - aws eks update-kubeconfig --region ap-south-1 --name cicdk8masternode
+     - aws eks update-kubeconfig --region ap-south-1 --name cicdk8masternode --rolearn: arn:aws:iam::757649255209:role/codebuild-newcicd2025-service-role
 
      - echo Updating image in Kubernetes deployment...
      - kubectl set image deployment/myapp webapp=$REPO:$IMAGE_TAG
@@ -35,5 +35,6 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
+
 
 
