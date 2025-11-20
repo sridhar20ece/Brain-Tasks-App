@@ -9,6 +9,7 @@ phases:
 
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 757649255209.dkr.ecr.ap-south-1.amazonaws.com
+
       - IMAGE_TAG="latest"
       - REPO="757649255209.dkr.ecr.ap-south-1.amazonaws.com/awsrepo/myrepo"
 
@@ -31,21 +32,19 @@ phases:
       - echo "Assumed role successfully."
       - aws sts get-caller-identity
 
-
       - echo Creating imagedefinitions.json...
       - printf '[{"name":"webapp","imageUri":"%s"}]' "$REPO:$IMAGE_TAG" > imagedefinitions.json
       - cat imagedefinitions.json
 
       - echo Updating kubeconfig...
-      aws eks update-kubeconfig \
-        --region ap-south-1 \
-        --name cicdk8masternode \
-        --alias cicdk8 \
-        --role-arn arn:aws:iam::757649255209:role/codebuild-eks-access-role \
-        --kubeconfig /root/.kube/config
-        
+      - aws eks update-kubeconfig \
+          --region ap-south-1 \
+          --name cicdk8masternode \
+          --alias cicdk8 \
+          --role-arn arn:aws:iam::757649255209:role/codebuild-eks-access-role \
+          --kubeconfig /root/.kube/config
 
-        cat /root/.kube/config
+      - cat /root/.kube/config
 
       - echo Updating image in Kubernetes deployment...
       - kubectl set image deployment/myapp webapp=$REPO:$IMAGE_TAG
@@ -56,6 +55,3 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
-
-
-
