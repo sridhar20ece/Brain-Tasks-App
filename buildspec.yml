@@ -15,7 +15,7 @@ phases:
   post_build:
     commands:
       - echo Pushing Docker Image to ECR...
-      - docker push $REPO:$IMAGE_TAG
+      - docker push 757649255209.dkr.ecr.ap-south-1.amazonaws.com/awsrepo/myrepo:latest
 
 artifacts:
   files:
@@ -25,6 +25,7 @@ post_build:
   commands:
     - echo Creating imagedefinitions.json...
     - printf '[{"name":"webapp","imageUri":"%s"}]' "$REPO:$IMAGE_TAG" > imagedefinitions.json
+
 
 
 
