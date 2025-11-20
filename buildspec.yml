@@ -3,6 +3,10 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      - echo Installing dependencies...
+      - apt-get update -y
+      - apt-get install -y jq
+
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 757649255209.dkr.ecr.ap-south-1.amazonaws.com
       - IMAGE_TAG="latest"
@@ -18,12 +22,12 @@ phases:
     commands:
       - echo Pushing Docker Image to ECR...
       - docker push $REPO:$IMAGE_TAG
+
       - echo Assuming EKS Access Role...
       - CREDS=$(aws sts assume-role --role-arn arn:aws:iam::757649255209:role/codebuild-eks-access-role --role-session-name eks-session)
-
       - export AWS_ACCESS_KEY_ID=$(echo $CREDS | jq -r '.Credentials.AccessKeyId')
       - export AWS_SECRET_ACCESS_KEY=$(echo $CREDS | jq -r '.Credentials.SecretAccessKey')
-      #- export AWS_SESSION_TOKEN=$(echo $CREDS | jq -r '.Credentials.SessionToken')
+      - export AWS_SESSION_TOKEN=$(echo $CREDS | jq -r '.Credentials.SessionToken')
       - echo "Assumed role successfully."
 
       - echo Creating imagedefinitions.json...
@@ -31,7 +35,7 @@ phases:
       - cat imagedefinitions.json
 
       - echo Updating kubeconfig...
-      - aws eks update-kubeconfig --region ap-south-1 --name cicdk8masternode --role-arn arn:aws:iam::757649255209:role/codebuild-eks-access-role
+      - aws eks update-kubeconfig --region ap-south-1 --name cicdk8masternode
 
       - echo Updating image in Kubernetes deployment...
       - kubectl set image deployment/myapp webapp=$REPO:$IMAGE_TAG
@@ -42,10 +46,3 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
-
-
-
-
-
-
-
