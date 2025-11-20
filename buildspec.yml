@@ -29,13 +29,23 @@ phases:
       - export AWS_SECRET_ACCESS_KEY=$(echo $CREDS | jq -r '.Credentials.SecretAccessKey')
       - export AWS_SESSION_TOKEN=$(echo $CREDS | jq -r '.Credentials.SessionToken')
       - echo "Assumed role successfully."
+      - aws sts get-caller-identity
+
 
       - echo Creating imagedefinitions.json...
       - printf '[{"name":"webapp","imageUri":"%s"}]' "$REPO:$IMAGE_TAG" > imagedefinitions.json
       - cat imagedefinitions.json
 
       - echo Updating kubeconfig...
-      - aws eks update-kubeconfig --region ap-south-1 --name cicdk8masternode
+      aws eks update-kubeconfig \
+        --region ap-south-1 \
+        --name cicdk8masternode \
+        --alias cicdk8 \
+        --role-arn arn:aws:iam::757649255209:role/codebuild-eks-access-role \
+        --kubeconfig /root/.kube/config
+        
+
+        cat /root/.kube/config
 
       - echo Updating image in Kubernetes deployment...
       - kubectl set image deployment/myapp webapp=$REPO:$IMAGE_TAG
@@ -46,5 +56,6 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
+
 
 
