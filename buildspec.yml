@@ -19,7 +19,7 @@ phases:
       - echo Pushing Docker Image to ECR...
       - docker push $REPO:$IMAGE_TAG
       - echo Assuming EKS Access Role...
-      - CREDS=$(aws sts assume-role --role-arn arn:aws:iam::757649255209:role/codebuild-eks-access-role)
+      - CREDS=$(aws sts assume-role --role-arn arn:aws:iam::757649255209:role/codebuild-eks-access-role --role-session-name eks-session)
 
       - export AWS_ACCESS_KEY_ID=$(echo $CREDS | jq -r '.Credentials.AccessKeyId')
       - export AWS_SECRET_ACCESS_KEY=$(echo $CREDS | jq -r '.Credentials.SecretAccessKey')
@@ -42,6 +42,7 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
+
 
 
 
