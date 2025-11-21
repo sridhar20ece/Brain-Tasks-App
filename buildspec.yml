@@ -45,11 +45,15 @@ phases:
       #- kubectl set image deployment/myapp webapp=$REPO:$IMAGE_TAG
 
       - echo Applying full manifest...
+      - pwd
+      - ls -l
+      - ls -l k8s
       - kubectl apply -f k8s/deployment.yaml
 
 artifacts:
   files:
     - imagedefinitions.json
+
 
 
 
