@@ -47,12 +47,12 @@ phases:
       - echo Applying full manifest...
       - pwd
       - ls -l
-      - ls -l k8s
       - kubectl apply -f deployment.yaml
 
 artifacts:
   files:
     - imagedefinitions.json
+
 
 
 
