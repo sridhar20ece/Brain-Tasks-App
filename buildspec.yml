@@ -30,12 +30,7 @@ phases:
       - cat imagedefinitions.json
 
       - echo "Updating kubeconfig for EKS cluster..."
-      - aws eks update-kubeconfig \
-          --region ap-south-1 \
-          --name cicdk8masternode \
-          --role-arn arn:aws:iam::757649255209:role/codebuild-eks-access-role \
-          --alias cicdk8
-
+      - aws eks update-kubeconfig --region ap-south-1 --name cicdk8masternode --alias cicdk8 --role-arn arn:aws:iam::757649255209:role/codebuild-eks-access-role --kubeconfig /root/.kube/config
       - echo "Validating kubectl access..."
       - kubectl get nodes
 
@@ -48,3 +43,4 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
+
