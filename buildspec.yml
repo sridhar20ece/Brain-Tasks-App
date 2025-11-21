@@ -24,11 +24,7 @@ phases:
       - echo Pushing Docker Image to ECR...
       - docker push $REPO:$IMAGE_TAG
 
-      - echo Assuming EKS Access Role...
-      - export AWS_ACCESS_KEY_ID=$(echo $CREDS | jq -r '.Credentials.AccessKeyId')
-      - export AWS_SECRET_ACCESS_KEY=$(echo $CREDS | jq -r '.Credentials.SecretAccessKey')
-      - export AWS_SESSION_TOKEN=$(echo $CREDS | jq -r '.Credentials.SessionToken')
-      - echo "Assumed role successfully."
+
       - aws sts get-caller-identity
 
       - echo Creating imagedefinitions.json...
@@ -51,6 +47,7 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
+
 
 
 
