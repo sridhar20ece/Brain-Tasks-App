@@ -34,23 +34,14 @@ phases:
       - cat imagedefinitions.json
       - echo "Updating kubeconfig for EKS cluster..."
       - aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME --kubeconfig /root/.kube/config
-      - echo "DEBUG: AWS Version"
       - aws --version
-      - echo "DEBUG: Caller Identity"
       - aws sts get-caller-identity
-      - echo "DEBUG: EKS token test"
       - aws eks get-token --cluster-name $CLUSTER_NAME --region $REGION || true
-      - echo "DEBUG: kubeconfig details"
       - kubectl config view --kubeconfig=/root/.kube/config --minify || true
-      - echo "DEBUG: kubectl version"
       - kubectl version --client --short || true
-      - echo "DEBUG: node listing"
       - kubectl --kubeconfig=/root/.kube/config get nodes --v=8 || true
-      - echo "Validating kubectl access..."
       - kubectl --kubeconfig=/root/.kube/config describe configmap aws-auth -n kube-system
-      - echo "Updating image in Kubernetes deployment..."
       - kubectl --kubeconfig=/root/.kube/config set image deployment/myapp webapp=$REPO:$IMAGE_TAG
-      - echo "Applying full Kubernetes manifest..."
       - kubectl --kubeconfig=/root/.kube/config apply -f k8s/deployment.yaml
 
 artifacts:
