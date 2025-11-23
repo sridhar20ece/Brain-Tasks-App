@@ -36,7 +36,7 @@ phases:
 
       - echo "Updating kubeconfig for EKS cluster..."
       - aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME
-            - echo "DEBUG: aws version"
+      - echo "DEBUG: aws version"
       - aws --version
       - echo "DEBUG: caller identity"
       - aws sts get-caller-identity
@@ -66,5 +66,6 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
+
 
 
