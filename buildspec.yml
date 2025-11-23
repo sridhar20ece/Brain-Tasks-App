@@ -38,7 +38,7 @@ phases:
       - aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME --kubeconfig /root/.kube/config
 
       # ----------------- DEBUG SECTION -----------------
-      - echo "DEBUG: aws version"
+     
       - aws --version
 
       - echo "DEBUG: caller identity"
@@ -69,3 +69,4 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
+
