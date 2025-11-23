@@ -40,19 +40,13 @@ phases:
       # ----------------- DEBUG SECTION -----------------
      
       - aws --version
-
-      - echo "DEBUG: caller identity"
       - aws sts get-caller-identity
-
       - echo "DEBUG: try get-token"
       - aws eks get-token --cluster-name $CLUSTER_NAME --region $REGION || true
-
       - echo "DEBUG: kubeconfig"
       - kubectl config view --kubeconfig=/root/.kube/config --minify || true
-
       - echo "DEBUG: kubectl version"
       - kubectl version --client --short || true
-
       - echo "DEBUG: kubectl get nodes verbose"
       - kubectl --kubeconfig=/root/.kube/config get nodes --v=8 || true
       # -------------------------------------------------
@@ -69,4 +63,5 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
+
 
