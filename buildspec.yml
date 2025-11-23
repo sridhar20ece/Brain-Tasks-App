@@ -33,7 +33,7 @@ phases:
       - printf '[{"name":"webapp","imageUri":"%s"}]' "$REPO:$IMAGE_TAG" > imagedefinitions.json
       - cat imagedefinitions.json
       - echo "Updating kubeconfig for EKS cluster..."
-      - aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME --kubeconfig /root/.kube/config
+      - aws eks update-kubeconfig  --name cicdk8masternode --kubeconfig /root/.kube/config
       - aws --version
       - aws sts get-caller-identity
       - kubectl --kubeconfig=/root/.kube/config get nodes
@@ -44,4 +44,5 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
+
 
