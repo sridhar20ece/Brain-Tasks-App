@@ -35,37 +35,37 @@ phases:
       - cat imagedefinitions.json
 
       - echo "Updating kubeconfig for EKS cluster..."
-      - aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME
+      - aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME --kubeconfig /root/.kube/config
+
+      # ----------------- DEBUG SECTION -----------------
       - echo "DEBUG: aws version"
       - aws --version
+
       - echo "DEBUG: caller identity"
       - aws sts get-caller-identity
+
       - echo "DEBUG: try get-token"
-      - aws eks get-token --cluster-name cicdk8masternode --region ap-south-1 || true
+      - aws eks get-token --cluster-name $CLUSTER_NAME --region $REGION || true
+
       - echo "DEBUG: kubeconfig"
-      - kubectl config view --minify || true
+      - kubectl config view --kubeconfig=/root/.kube/config --minify || true
+
       - echo "DEBUG: kubectl version"
       - kubectl version --client --short || true
-      - echo "DEBUG: kubectl get nodes verbose"
-      - kubectl get nodes --v=8 || true
 
-      - kubectl --kubeconfig ~/.kube/config get nodes
-      - echo "Checking AWS identity..."
-      - aws sts get-caller-identity
-      
+      - echo "DEBUG: kubectl get nodes verbose"
+      - kubectl --kubeconfig=/root/.kube/config get nodes --v=8 || true
+      # -------------------------------------------------
 
       - echo "Validating kubectl access..."
-      - kubectl describe configmap aws-auth -n kube-system
+      - kubectl --kubeconfig=/root/.kube/config describe configmap aws-auth -n kube-system
 
       - echo "Updating image in Kubernetes deployment..."
-      - kubectl set image deployment/myapp webapp=$REPO:$IMAGE_TAG
+      - kubectl --kubeconfig=/root/.kube/config set image deployment/myapp webapp=$REPO:$IMAGE_TAG
 
       - echo "Applying full Kubernetes manifest..."
-      - kubectl apply -f k8s/deployment.yaml
+      - kubectl --kubeconfig=/root/.kube/config apply -f k8s/deployment.yaml
 
 artifacts:
   files:
     - imagedefinitions.json
-
-
-
