@@ -1,5 +1,12 @@
 version: 0.2
 
+env:
+  variables:
+    IMAGE_TAG: "latest"
+    REPO: "757649255209.dkr.ecr.ap-south-1.amazonaws.com/awsrepo/myrepo"
+    CLUSTER_NAME: "cicdk8masternode"
+    REGION: "ap-south-1"
+
 phases:
   install:
     commands:
@@ -10,9 +17,7 @@ phases:
   pre_build:
     commands:
       - echo "Logging in to Amazon ECR..."
-      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 757649255209.dkr.ecr.ap-south-1.amazonaws.com
-      - IMAGE_TAG="latest"
-      - REPO="757649255209.dkr.ecr.ap-south-1.amazonaws.com/awsrepo/myrepo"
+      - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $REPO
 
   build:
     commands:
@@ -30,7 +35,8 @@ phases:
       - cat imagedefinitions.json
 
       - echo "Updating kubeconfig for EKS cluster..."
-      - aws eks update-kubeconfig --region ap-south-1 --name cicdk8masternode --alias cicdk8 
+      - aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME
+
       - echo "Checking AWS identity..."
       - aws sts get-caller-identity
 
@@ -46,7 +52,3 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
-
-
-
-
