@@ -36,7 +36,7 @@ phases:
       - aws eks update-kubeconfig  --name cicdk8masternode --kubeconfig /root/.kube/config
       - aws --version
       - aws sts get-caller-identity
-      - kubectl --kubeconfig=/root/.kube/config get nodes
+      - ls -l /root/.kube/config
       - kubectl --kubeconfig=/root/.kube/config describe configmap aws-auth -n kube-system
       - kubectl --kubeconfig=/root/.kube/config set image deployment/myapp webapp=$REPO:$IMAGE_TAG
       - kubectl --kubeconfig=/root/.kube/config apply -f k8s/deployment.yaml
@@ -44,5 +44,6 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
+
 
 
