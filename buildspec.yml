@@ -42,11 +42,13 @@ phases:
       - ls -l /root/.kube/config
       - kubectl --kubeconfig=/root/.kube/config get nodes
       #- kubectl --kubeconfig=/root/.kube/config describe configmap aws-auth -n kube-system
-      - kubectl set image deployment/webapp02 webapp02=$REPO:$IMAGE_TAG
+      #- kubectl set image deployment/webapp02 webapp02=$REPO:$IMAGE_TAG
+      - kubectl apply -f deployment.yaml
 
 artifacts:
   files:
     - imagedefinitions.json
+
 
 
 
