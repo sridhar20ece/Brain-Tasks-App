@@ -18,6 +18,9 @@ phases:
     commands:
       - echo "Logging in to Amazon ECR..."
       - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $REPO
+      - which kubectl
+      - kubectl version --client
+
 
   build:
     commands:
@@ -44,6 +47,7 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
+
 
 
 
