@@ -31,10 +31,10 @@ phases:
   post_build:
     commands:
       - echo "Pushing Docker image to ECR..."
-      #- docker push $REPO:$IMAGE_TAG
-      #- echo "Creating imagedefinitions.json..."
-      #- printf '[{"name":"webapp","imageUri":"%s"}]' "$REPO:$IMAGE_TAG" > imagedefinitions.json
-      #- cat imagedefinitions.json
+      - docker push $REPO:$IMAGE_TAG
+      - echo "Creating imagedefinitions.json..."
+      - printf '[{"name":"webapp","imageUri":"%s"}]' "$REPO:$IMAGE_TAG" > imagedefinitions.json
+      - cat imagedefinitions.json
       - echo "Updating kubeconfig for EKS cluster..."
       - aws eks update-kubeconfig  --name cicdk8masternode --kubeconfig /root/.kube/config
       - aws --version
@@ -48,6 +48,7 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
+
 
 
 
