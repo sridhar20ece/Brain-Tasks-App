@@ -45,10 +45,12 @@ phases:
       #- kubectl set image deployment/webapp02 webapp02=$REPO:$IMAGE_TAG
       - kubectl apply -f deployment.yaml
       - kubectl apply -f service.yaml
+      - kubectl rollout status deployment/webapp02
 
 artifacts:
   files:
     - imagedefinitions.json
+
 
 
 
